@@ -1,0 +1,9 @@
+services:
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile.dev
+    volumes:
+      - ./auth-service/src:/src/auth-service/src
+      - ./shared:/src/shared
+      - ./Directory.Packages.props:/src/Directory.Packages.props
