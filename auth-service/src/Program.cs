@@ -7,8 +7,11 @@ using AuthService;
 using AuthService.Infra;
 using Microsoft.EntityFrameworkCore;
 using ApiDocumentation;
+using AuthService.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddExceptionHandler<DatabaseExceptionHandler>();
+builder.Services.AddProblemDetails();
 builder.AddSwaggerGenConfig(options =>
 {
     options.Title = "Auth Service API";
@@ -20,6 +23,7 @@ builder.Services.AddServices()
                 .AddInfraServices(builder.Configuration);
 
 var app = builder.Build();
+app.UseExceptionHandler();
 app.UseSwaggerUIConfig();
 
 using var scope = app.Services.CreateScope();
