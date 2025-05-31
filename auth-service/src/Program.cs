@@ -1,4 +1,3 @@
-using ApiDocumentation;
 using AuthService.Infra.Context;
 using AuthService.Infra.Models;
 using AuthService.Mappers;
@@ -7,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using AuthService;
 using AuthService.Infra;
 using Microsoft.EntityFrameworkCore;
+using ApiDocumentation;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.AddSwaggerGenConfig(options =>
