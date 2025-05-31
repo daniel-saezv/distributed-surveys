@@ -25,6 +25,9 @@ public class AuthDbContext(DbContextOptions<AuthDbContext> options) : DbContext(
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(DatabaseConstants.AuthSchema);
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Username)
+            .IsUnique();
         base.OnModelCreating(modelBuilder);
     }
 }

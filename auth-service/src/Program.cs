@@ -30,6 +30,16 @@ await context.Database.MigrateAsync();
 
 app.MapPost("/register", async (RegisterRequest req, AuthDbContext db, IPasswordHasher<User> hasher) =>
 {
+    var exists = await db.Users.AnyAsync(u => u.Username == req.Username);
+    if (exists)
+    {
+        return Results.Problem(
+            detail: "Username already exists.",
+            statusCode: StatusCodes.Status409Conflict,
+            title: "Conflict"
+        );
+    }
+
     var createdUser = await db.Users.AddAsync(req.ToUser(hasher));
     var response = createdUser.Entity.ToResponse();
 
