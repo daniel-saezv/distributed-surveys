@@ -72,7 +72,6 @@ docker-compose up auth-service
 
 - **PostgreSQL:** Shared database between services, with dedicated schemas to minimize costs.
 - **RabbitMq:** Queue for processing and analysis events.
-- **PgAdmin:** UI for PostgreSQL database.
 
 ## License
 

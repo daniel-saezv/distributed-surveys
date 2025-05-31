@@ -94,17 +94,6 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@mail.com
-      PGADMIN_DEFAULT_PASSWORD: adminpassword
-    ports:
-      - 8080:80
-    depends_on:
-      - db
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
+      
 volumes:
   pgdata: null
-  pgadmin_data: null
