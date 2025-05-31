@@ -1,0 +1,110 @@
+---
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    ports:
+      - 5000:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+    depends_on:
+      - auth-service
+      - survey-service
+      - response-service
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    ports:
+      - 5001:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=${SHARED_DB_CONNECTION}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+    depends_on:
+      - db
+  survey-service:
+    build:
+      context: .
+      dockerfile: survey-service/Dockerfile
+    ports:
+      - 5002:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=${SHARED_DB_CONNECTION}
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+    depends_on:
+      - db
+  response-service:
+    build:
+      context: .
+      dockerfile: response-service/Dockerfile
+    ports:
+      - 5003:80
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=${SHARED_DB_CONNECTION}
+      - RabbitMQ__HostName=rabbitmq
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+    depends_on:
+      - db
+      - rabbitmq
+  analysis-worker:
+    build:
+      context: .
+      dockerfile: analysis-worker/Dockerfile
+    ports:
+      - 5004:80
+    environment:
+      - ConnectionStrings__DefaultConnection=${SHARED_DB_CONNECTION}
+      - RabbitMQ__HostName=rabbitmq
+      - ASPNETCORE_URLS=${ASPNETCORE_URLS}
+      - ASPNETCORE_HTTP_PORTS=${ASPNETCORE_HTTP_PORTS}
+    depends_on:
+      - db
+      - rabbitmq
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     args:
+  #       BUILD_CONFIG: development
+  #   ports:
+  #     - 4200:80
+  #   environment:
+  #     - NODE_ENV=development
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: mvpdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@mail.com
+      PGADMIN_DEFAULT_PASSWORD: adminpassword
+    ports:
+      - 8080:80
+    depends_on:
+      - db
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+volumes:
+  pgdata: null
+  pgadmin_data: null

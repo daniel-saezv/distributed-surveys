@@ -1,0 +1,52 @@
+# .NET build artifacts
+bin/
+obj/
+out/
+publish/
+TestResults/
+*.db
+*.sqlite
+*.pdb
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# NuGet packages
+*.nupkg
+packages/
+.nuget/
+.tool/
+
+# Logs
+*.log
+
+
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# Rider
+.idea/
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Angular build artifacts
+/frontend/dist/
+/frontend/node_modules/
+/frontend/.angular/
+/frontend/.env
+
+# NPM/Yarn logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db

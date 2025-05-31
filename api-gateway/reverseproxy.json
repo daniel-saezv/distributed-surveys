@@ -1,0 +1,50 @@
+{
+  "ReverseProxy": {
+    "Routes": [
+      {
+        "RouteId": "auth",
+        "ClusterId": "authCluster",
+        "Match": {
+          "Path": "/api/auth/{**catch-all}"
+        }
+      },
+      {
+        "RouteId": "survey",
+        "ClusterId": "surveyCluster",
+        "Match": {
+          "Path": "/api/surveys/{**catch-all}"
+        }
+      },
+      {
+        "RouteId": "response",
+        "ClusterId": "responseCluster",
+        "Match": {
+          "Path": "/api/responses/{**catch-all}"
+        }
+      }
+    ],
+    "Clusters": {
+      "authCluster": {
+        "Destinations": {
+          "auth": {
+            "Address": "http://auth-service"
+          }
+        }
+      },
+      "surveyCluster": {
+        "Destinations": {
+          "survey": {
+            "Address": "http://survey-service"
+          }
+        }
+      },
+      "responseCluster": {
+        "Destinations": {
+          "response": {
+            "Address": "http://response-service"
+          }
+        }
+      }
+    }
+  }
+}
