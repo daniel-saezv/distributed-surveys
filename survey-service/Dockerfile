@@ -1,9 +1,11 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 WORKDIR /src
 
-COPY . .
+COPY survey-service/src/. ./survey-service/src
+COPY shared ./shared
+COPY Directory.Packages.props ./
 
-WORKDIR /src/survey-service
+WORKDIR /src/survey-service/src
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
