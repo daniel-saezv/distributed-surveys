@@ -4,16 +4,17 @@ using AuthService.Mappers;
 using AuthService.Models.Login;
 using AuthService.Models.Register;
 using AuthService.Services.Jwt;
+using AuthService.Utils;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace AuthService.Utils;
+namespace AuthService;
 
 /// <summary>
 /// Utility class for mapping endpoints in the Auth Service.
 /// </summary>
-public static class EndpointMapper
+public static class EndpointDefinition
 {
     /// <summary>
     /// Maps the endpoints for user registration and login in the Auth Service.

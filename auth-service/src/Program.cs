@@ -4,7 +4,6 @@ using AuthService.Infra;
 using Microsoft.EntityFrameworkCore;
 using ApiDocumentation;
 using AuthService.Middlewares;
-using AuthService.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddExceptionHandler<DatabaseExceptionHandler>();
