@@ -1,4 +1,4 @@
-namespace AuthService.Constants;
+namespace AuthService.Utils;
 
 /// <summary>
 /// Contains constants related to the database schema used in the authentication service.

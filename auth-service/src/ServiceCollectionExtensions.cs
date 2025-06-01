@@ -1,4 +1,5 @@
 using AuthService.Infra.Models;
+using AuthService.Services.Jwt;
 using Microsoft.AspNetCore.Identity;
 
 namespace AuthService;
@@ -15,6 +16,7 @@ public static class ServiceCollectionExtensions
     /// <returns></returns>
     public static IServiceCollection AddServices(this IServiceCollection services)
     {
-        return services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+        return services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>()
+                       .AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
     }
 }

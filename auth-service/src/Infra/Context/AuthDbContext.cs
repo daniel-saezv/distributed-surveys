@@ -1,5 +1,5 @@
-using AuthService.Constants;
 using AuthService.Infra.Models;
+using AuthService.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuthService.Infra.Context;

@@ -8,6 +8,10 @@ using AuthService.Infra;
 using Microsoft.EntityFrameworkCore;
 using ApiDocumentation;
 using AuthService.Middlewares;
+using AuthService.Models.Login;
+using AuthService.Services.Jwt;
+using Microsoft.AspNetCore.Http.HttpResults;
+using AuthService.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddExceptionHandler<DatabaseExceptionHandler>();
@@ -32,24 +36,39 @@ await context.Database.MigrateAsync();
 
 #region Endpoint Definition
 
-app.MapPost("/register", async (RegisterRequest req, AuthDbContext db, IPasswordHasher<User> hasher) =>
+app.MapPost("/register", async Task<Results<Created<RegisterResponse>, ProblemHttpResult>> (
+    RegisterRequest req,
+    AuthDbContext db,
+    IPasswordHasher<User> hasher) =>
 {
     var exists = await db.Users.AnyAsync(u => u.Username == req.Username);
     if (exists)
-    {
-        return Results.Problem(
-            detail: "Username already exists.",
-            statusCode: StatusCodes.Status409Conflict,
-            title: "Conflict"
-        );
-    }
+        return ProblemResults.AlreadyRegistered();
 
     var createdUser = await db.Users.AddAsync(req.ToUser(hasher));
     var response = createdUser.Entity.ToResponse();
 
     await db.SaveChangesAsync();
 
-    return Results.Created($"/users/{response.Id}", response);
+    return TypedResults.Created($"/users/{response.Id}", response);
+});
+
+app.MapPost("/login", async Task<Results<Ok<LoginResponse>, UnauthorizedHttpResult>> (
+    LoginRequest req,
+    AuthDbContext db,
+    IPasswordHasher<User> hasher,
+    IJwtTokenGenerator jwtGen) =>
+{
+    var user = await db.Users.SingleOrDefaultAsync(u => u.Username == req.Username);
+    if (user is null)
+        return TypedResults.Unauthorized();
+
+    var result = hasher.VerifyHashedPassword(user, user.PasswordHash, req.Password);
+    if (result is not PasswordVerificationResult.Success)
+        return TypedResults.Unauthorized();
+
+    var token = jwtGen.GenerateToken(user);
+    return TypedResults.Ok(new LoginResponse(token));
 });
 #endregion
 

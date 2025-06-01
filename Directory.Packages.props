@@ -8,6 +8,8 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
   <ItemGroup>
+    <!--Documentation-->
+    <PackageVersion Include="Swashbuckle.Core" Version="5.6.0" />
     <!-- Entity Framework Core -->
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.5" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.5" />
@@ -17,9 +19,10 @@
     <!-- Serilog -->
     <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
-    <!-- RabbitMQ -->
+    <!-- Queues -->
     <PackageVersion Include="RabbitMQ.Client" Version="7.1.2" />
-    <PackageVersion Include="Swashbuckle.Core" Version="5.6.0" />
+    <!-- Auth -->
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.5" />
     <!-- YARP (API Gateway) -->
     <PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />
     <!-- DEVELOPMENT -->
