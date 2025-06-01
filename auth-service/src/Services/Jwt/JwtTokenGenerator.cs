@@ -1,16 +1,18 @@
 using System.Security.Claims;
 using System.Text;
 using AuthService.Infra.Models;
+using AuthService.Models.Options;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
 namespace AuthService.Services.Jwt;
 
 /// <summary>
-/// Generates JWT tokens for authenticated users.
+/// Generates JWT tokens for user authentication.
 /// </summary>
-/// <param name="config"></param>
-public class JwtTokenGenerator(IConfiguration config) : IJwtTokenGenerator
+/// <param name="options"></param>
+public class JwtTokenGenerator(IOptions<JwtOptions> options) : IJwtTokenGenerator
 {
     /// <summary>
     /// Generates a JWT token for the specified user.
@@ -30,11 +32,11 @@ public class JwtTokenGenerator(IConfiguration config) : IJwtTokenGenerator
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = DateTime.UtcNow.AddMinutes(30),
-            Issuer = config["Jwt:Issuer"],
-            Audience = config["Jwt:Audience"],
+            Expires = DateTime.UtcNow.AddMinutes(options.Value.ExpirationMinutes),
+            Issuer = options.Value.Issuer,
+            Audience = options.Value.Audience,
             SigningCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]!)),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.Key)),
                 SecurityAlgorithms.HmacSha256)
         };
 

@@ -7,4 +7,11 @@ COPY Directory.Packages.props ./
 
 WORKDIR /src/auth-service/src
 
+# Instala vsdbg para depuración remota TEMPORAL
+RUN apt-get update && apt-get install -y wget \
+    && mkdir -p /remote_debugger \
+    && wget -q https://aka.ms/getvsdbgsh -O /remote_debugger/getvsdbg.sh \
+    && bash /remote_debugger/getvsdbg.sh -v latest -r linux-x64 -l /remote_debugger \
+    && chmod +x /remote_debugger/vsdbg
+
 CMD ["dotnet", "watch", "run", "--urls=http://0.0.0.0:80"]

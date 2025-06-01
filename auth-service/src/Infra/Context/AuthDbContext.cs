@@ -22,6 +22,7 @@ public class AuthDbContext(DbContextOptions<AuthDbContext> options) : DbContext(
     /// Configures the model for the authentication database context.
     /// </summary>
     /// <param name="modelBuilder"></param>
+    /// 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(DatabaseConstants.AuthSchema);
